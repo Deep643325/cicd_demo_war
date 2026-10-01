@@ -1,0 +1,35 @@
+---
+- name: Deploy WAR to JBoss
+  hosts: jboss
+  become: false
+
+  vars:
+    jboss_deploy_dir: /opt/jboss-eap-6.4/standalone/deployments
+    war_name: jboss-cicd-demo.war
+
+  tasks:
+
+    - name: Remove old WAR
+      ansible.builtin.file:
+        path: "{{ jboss_deploy_dir }}/{{ war_name }}"
+        state: absent
+
+    - name: Copy new WAR to JBoss
+      ansible.builtin.copy:
+        src: "/opt/cicd/jboss-cicd-demo/target/{{ war_name }}"
+        dest: "{{ jboss_deploy_dir }}/{{ war_name }}"
+        mode: '0644'
+
+    - name: Wait for JBoss deployment
+      ansible.builtin.pause:
+        seconds: 10
+
+    - name: Check deployed WAR
+      ansible.builtin.stat:
+        path: "{{ jboss_deploy_dir }}/{{ war_name }}"
+      register: war_status
+
+    - name: Display deployment result
+      ansible.builtin.debug:
+        msg: "WAR deployed successfully to JBoss"
+      when: war_status.stat.exists
