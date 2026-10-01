@@ -6,7 +6,7 @@
          http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
 
-    <display-name>JBoss CI/CD Demo</display-name>
+    <display-name>Deepal JBoss CI/CD Demo</display-name>
 
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>
